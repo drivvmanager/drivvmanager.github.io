@@ -67,6 +67,7 @@
       
     <link rel="stylesheet" href="styles.css">
       
+      
     <style>
     #addBtn {
       position: fixed;
@@ -232,24 +233,6 @@ function timerUp()
   </head>
   <body bgcolor="#EFEBE9">
       
-      <dialog id="loginDialog" class="mdl-dialog">
-          <h4 class="mdl-dialog__title">Login</h4>
-          <div class="mdl-dialog__content">
-              <p id="loginError"> </p>
-              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                  <input class="mdl-textfield__input" type="text" id="loginEmail">
-                  <label id="emailLabel" class="mdl-textfield__label" for="sample3">Email ...</label>
-              </div>
-              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                  <input class="mdl-textfield__input" type="password" id="loginPassword">
-                  <label id="passwordLabel" class="mdl-textfield__label" for="sample3">Passwort ...</label>
-              </div>
-          </div>
-          <div class="mdl-dialog__actions">
-              <button id="loginBtn" onClick="startTimer()" class="page-loader mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Login</button>
-          </div>
-      </dialog>
-      
       <div class="login-cover">
           <!-- MDL Spinner Component with Single Color -->
           <div id="login-loading" class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
@@ -312,7 +295,75 @@ function timerUp()
               </nav></div>
           
           <main class="mdl-layout__content">
-            
+              
+              <button id="addBtn" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent" id="add">
+            <i class="material-icons" role="presentation">add</i>
+            <span class="visuallyhidden">Add</span>
+          </button>
+              
+  <dialog class="mdl-dialog">
+    <h4 class="mdl-dialog__title"><i class="material-icons">school</i> Neue/r Fahrschüler/in</h4>
+    <div class="mdl-dialog__content">
+      <p>
+        
+      </p>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="text" id="pupilName">
+                  <label id="emailLabel" class="mdl-textfield__label" for="sample1">Name ...</label>
+              </div>
+        
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="text" id="pupilName">
+                  <label id="emailLabel" class="mdl-textfield__label" for="sample2">Adresse ...</label>
+              </div>
+        
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
+            <input class="mdl-textfield__input" type="text" id="sample3" value="männlich" readonly tabIndex="-1">
+            <label for="sample3" class="mdl-textfield__label">Geschlecht</label>
+            <ul for="sample3" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+                <li class="mdl-menu__item">männlich</li>
+                <li class="mdl-menu__item">weiblich</li>
+            </ul>
+        </div>
+        
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
+            <input class="mdl-textfield__input" type="text" id="sample4" value="B" readonly tabIndex="-1">
+            <label for="sample4" class="mdl-textfield__label">Ausbildungsklasse</label>
+            <ul for="sample4" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+                <li class="mdl-menu__item">B</li>
+                <li class="mdl-menu__item">BE</li>
+            </ul>
+        </div>
+        
+        <form action="#">
+  <div class="mdl-textfield mdl-js-textfield">
+    <textarea class="mdl-textfield__input" type="text" rows= "3" id="sample5" ></textarea>
+    <label class="mdl-textfield__label" for="sample5">Bemerkung ...</label>
+  </div>
+</form>
+        
+        
+        
+    </div>
+    <div class="mdl-dialog__actions">
+      <button type="button" disabled class="mdl-button">Hinzufügen</button>
+      <button type="button" class="mdl-button close">Abbrechen</button>
+    </div>
+  </dialog>
+  <script>
+    var dialog = document.querySelector('dialog');
+    var showDialogButton = document.querySelector('#addBtn');
+    if (! dialog.showModal) {
+      dialogPolyfill.registerDialog(dialog);
+    }
+    showDialogButton.addEventListener('click', function() {
+      dialog.showModal();
+    });
+    dialog.querySelector('.close').addEventListener('click', function() {
+      dialog.close();
+    });
+  </script>
+              
           </main>
         
       </div>
@@ -320,3 +371,18 @@ function timerUp()
       
   </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
