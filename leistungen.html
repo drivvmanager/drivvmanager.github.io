@@ -1,0 +1,322 @@
+<!doctype html>
+
+<!--
+  Drivv - Driving School Scheduler
+  Copyright 2017 Fabian Baldeau. All rights reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="theme-color" content="#5D4037">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Drivv Manager, a private driving school manager">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Drivv Test Template</title>
+      
+      <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+      <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+      <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+      <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+      <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+      <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+      <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+      <link rel="manifest" href="/manifest.json">
+      <meta name="msapplication-TileColor" content="#ffffff">
+      <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="images/android-desktop.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Drivv Manager">
+    <link rel="apple-touch-icon-precomposed" href="images/ios-desktop.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#3372DF">
+
+    <link rel="shortcut icon" href="images/favicon.ico">
+
+    <!-- Page styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.brown-deep_purple.min.css" />
+    <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+      
+    <link rel="stylesheet" href="styles.css">
+      
+    <style>
+    #addBtn {
+      position: fixed;
+      display: block;
+      right: 0;
+      bottom: 0;
+      margin-right: 40px;
+      margin-bottom: 40px;
+      z-index: 900;
+    }
+    </style>
+      
+      <!-- Firebase -->
+  <!-- ***********************************************************************************************************************
+       * TODO(DEVELOPER): Paste the initialization snippet from: Firebase Console > Overview > Add Firebase to your web app. *
+       *********************************************************************************************************************** -->
+ <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBKs873aVXjWfArb9hQ2__9BP0cBLL6xfs",
+            authDomain: "drivvr-b3665.firebaseapp.com",
+            databaseURL: "https://drivvr-b3665.firebaseio.com",
+            storageBucket: "drivvr-b3665.appspot.com",
+            messagingSenderId: "1026714506792"
+        };
+        firebase.initializeApp(config);
+    </script>
+    
+
+  <script type="text/javascript">
+
+    /**
+     * Handles the sign in button press.
+     */
+    function toggleSignIn() {
+      if (firebase.auth().currentUser) {
+        // [START signout]
+        firebase.auth().signOut();
+        // [END signout]
+      } else {
+        var email = document.getElementById('loginEmail').value;
+        var password = document.getElementById('loginPassword').value;
+        if (email.length < 4) {
+          alert('Please enter an email address.');
+          return;
+        }
+        if (password.length < 4) {
+          alert('Please enter a password.');
+          return;
+        }
+        // Sign in with email and pass.
+        // [START authwithemail]
+        firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // [START_EXCLUDE]
+          if (errorCode === 'auth/wrong-password') {
+            alert('Wrong password.');
+          } else {
+            alert(errorMessage);
+          }
+          console.log(error);
+          document.getElementById('loginBtn').disabled = false;
+          // [END_EXCLUDE]
+        });
+        // [END authwithemail]
+      }
+      document.getElementById('loginBtn').disabled = true;
+    }
+      
+      
+
+    /**
+     * initApp handles setting up UI event listeners and registering Firebase auth listeners:
+     *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
+     *    out, and that is where we update the UI.
+     */
+    function initApp() {
+      // Listening for auth state changes.
+      // [START authstatelistener]
+      firebase.auth().onAuthStateChanged(function(user) {
+        // [START_EXCLUDE silent]
+        // [END_EXCLUDE]
+        if (user) {
+          // User is signed in.
+            
+            document.getElementById("main-layout").style.visibility = "visible";
+            document.getElementById("addBtn").style.visibility = "visible";
+            document.getElementById("login-loading").style.visibility = "hidden";
+            document.getElementById("loginDialog").style.visibility = "hidden";
+            document.getElementById("emailLabel").style.visibility = "hidden";
+            document.getElementById("passwordLabel").style.visibility = "hidden";
+            
+            
+            var dialog = document.querySelector('#loginDialog');
+            if (! dialog.showModal) {
+                dialogPolyfill.registerDialog(dialog);
+            }
+            dialog.hide();
+            
+          var displayName = user.displayName;
+          var email = user.email;
+          var emailVerified = user.emailVerified;
+          var photoURL = user.photoURL;
+          var isAnonymous = user.isAnonymous;
+          var uid = user.uid;
+          var providerData = user.providerData;
+          // [START_EXCLUDE silent]
+          // [END_EXCLUDE]
+        } else {
+          // User is signed out.
+          // [START_EXCLUDE silent]
+            
+            
+            document.getElementById("main-layout").style.visibility = "hidden";
+            document.getElementById("addBtn").style.visibility = "hidden";
+            document.getElementById("login-loading").style.visibility = "visible";
+            document.getElementById("loginDialog").style.visibility = "visible";
+            document.getElementById("emailLabel").style.visibility = "visible";
+            document.getElementById("passwordLabel").style.visibility = "visible";
+            
+            var dialog = document.querySelector('#loginDialog');
+            if (! dialog.showModal) {
+                dialogPolyfill.registerDialog(dialog);
+            }
+            dialog.showModal();
+          // [END_EXCLUDE]
+        }
+        // [START_EXCLUDE silent]
+        document.getElementById('loginBtn').disabled = false;
+        // [END_EXCLUDE]
+      });
+      // [END authstatelistener]
+
+      document.getElementById('loginBtn').addEventListener('click', toggleSignIn, false);
+    }
+
+    window.onload = function() {
+      initApp();
+    };
+      
+      var timer=0;
+function startTimer()
+{
+	setInterval("timerUp()",1000);
+}
+
+function timerUp()
+{
+	timer++;
+        var resetat=1; //change this number to adjust the length of time in seconds
+	if(timer==resetat)
+	{
+		window.location.reload();
+	}
+	var tleft=resetat-timer;
+	document.getElementById('timer').innerHTML=tleft;
+}
+  </script>
+      
+  </head>
+  <body bgcolor="#EFEBE9">
+      
+      <dialog id="loginDialog" class="mdl-dialog">
+          <h4 class="mdl-dialog__title">Login</h4>
+          <div class="mdl-dialog__content">
+              <p id="loginError"> </p>
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="text" id="loginEmail">
+                  <label id="emailLabel" class="mdl-textfield__label" for="sample3">Email ...</label>
+              </div>
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                  <input class="mdl-textfield__input" type="password" id="loginPassword">
+                  <label id="passwordLabel" class="mdl-textfield__label" for="sample3">Passwort ...</label>
+              </div>
+          </div>
+          <div class="mdl-dialog__actions">
+              <button id="loginBtn" onClick="startTimer()" class="page-loader mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Login</button>
+          </div>
+      </dialog>
+      
+      <div class="login-cover">
+          <!-- MDL Spinner Component with Single Color -->
+          <div id="login-loading" class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+      </div>
+      
+      <div id="main-layout" class="mdl-layout mdl-js-layout">
+          <header class="mdl-layout__header">
+              <div class="mdl-layout-icon"></div>
+              <div class="mdl-layout__header-row">
+                  <span class="mdl-layout__title">Drivv Manager
+                      <span class="title-span"> | </span>
+                      <span class="title-span"> Leistungen </span>
+                  </span>
+                  <div class="mdl-layout-spacer"></div>
+                  <nav class="mdl-navigation">
+                      <button id="logoutBtn" onclick="toggleSignIn()" onClick="startTimer()" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">Logout <i class="button-right-icon material-icons">account_circle</i> </button>
+                  </nav>
+                  <button class="android-more-button mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" id="more-button">
+                      <i class="material-icons">more_vert</i>
+                  </button>
+                  <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right mdl-js-ripple-effect" for="more-button">
+                      <li class="mdl-menu__item" disabled>Einstellungen</li>
+                      <li class="mdl-menu__item">Close</li>
+                  </ul>
+              </div>
+              
+              
+          </header>
+          <div class="android-drawer mdl-layout__drawer">
+              <span class="mdl-layout-title">
+                  <img class="android-logo-image" src="images/logo_darkbrown.png">
+              </span>
+              <nav class="mdl-navigation">
+                  <a class="mdl-navigation__link" href="index.html"><i class="material-icons">dashboard</i> Übersicht</a>
+                  <a class="mdl-navigation__link" href="terminplaner.html"><i class="material-icons">assignment</i> Terminplaner</a>
+                  <div class="android-drawer-separator"></div>
+                  <span class="mdl-navigation__link" href=""><i class="material-icons">school</i> Fahrschüler/innen</span>
+                  <a class="mdl-navigation__link" href="aktive.html"><i class="material-icons">notifications_active</i> Aktive</a>
+                  <a class="mdl-navigation__link" href="neu.html"><i class="material-icons">group_add</i> Neue/r Fahrschüler/in</a>
+            
+                  <div class="android-drawer-separator"></div>
+            
+                  <span class="mdl-navigation__link" href=""><i class="material-icons">business</i> Mein Betrieb</span>
+                  <a class="mdl-navigation__link" href="finanzen.html"><i class="material-icons">attach_money</i> Finanzen</a>
+                  <a class="mdl-navigation__link" href="leistungen.html"><i class="material-icons">assessment</i> Leistungen</a>
+                  <a id="submenuBetrieb" class="mdl-navigation__link" href="#">Mehr</a>
+            
+                  <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="submenuBetrieb">
+                      <li href="fahrlehrer.html" class="mdl-menu__item"><i class="material-icons">airline_seat_recline_extra</i> Fahrlehrer/innen</li>
+                      <li href="filialien.html" class="mdl-menu__item"><i class="material-icons">location_city</i> Filialien</li>
+                      <li href="fahrzeuge.html" class="mdl-menu__item"><i class="material-icons">drive_eta</i> Fahrzeuge</li>
+                      <li href="archiv.html" class="mdl-menu__item"><i class="material-icons">archive</i> Archiv</li>
+                  </ul>
+            
+                  <div class="android-drawer-separator"></div>
+            
+                  <a class="mdl-navigation__link" href="datenausgabe.html"><i class="material-icons">print</i> Datenausgabe</a>
+                  <a class="mdl-navigation__link" onclick="toggleSignIn()" onClick="startTimer()" href=""><i class="material-icons">account_circle</i> Ausloggen</a>
+            
+              </nav></div>
+          
+          <main class="mdl-layout__content">
+              
+          </main>
+        
+      </div>
+      
+      
+  </body>
+</html>
